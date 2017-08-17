@@ -28,11 +28,15 @@ class Table_Type():
 
 
 class External_Kind():
-    def __init__(self):
-        self.Function = 0
-        self.Table = 1
-        self.Memory = 2
-        self.Global = 3
+    FUNCTION = 0
+    TABLE = 1
+    MEMORY = 2
+    GLOBAL = 3
+
+
+class Global_Kind():
+    IMMUTABLE = 0
+    MUTABLE = 1
 
 
 class Memory_Type():

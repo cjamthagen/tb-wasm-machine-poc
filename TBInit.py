@@ -1,7 +1,7 @@
 from utils import Colors, init_interpret
 from OpCodes import WASM_OP_Code
-from section_structs import Code_Section, Func_Body
 from execute import *
+from section_structs import Code_Section, Func_Body, External_Kind, Global_Kind
 
 
 # handles the debug option --memdump. dumps the contents of linear memories.
@@ -192,7 +192,18 @@ class ModuleValidation():
         return True
 
     def ImportSection(self):
-        pass
+        section = self.module.import_section
+        for entry in section.import_entry:
+            if entry.kind == External_Kind.FUNCTION:
+                pass
+            if entry.kind == External_Kind.TABLE:
+                pass
+            if entry.kind == External_Kind.MEMORY:
+                pass
+            if entry.kind == External_Kind.GLOBAL:
+                if entry.mutability != Global_Kind.IMMUTABLE:
+                    return(False)
+        return(True)
 
     def FunctionSection(self):
         pass
@@ -227,7 +238,8 @@ class ModuleValidation():
     def ValidateAll(self):
         if not self.TypeSection():
             return(False)
-        self.ImportSection()
+        if not self.ImportSection():
+            return(False)
         self.FunctionSection()
         self.TableSection()
         self.MemorySection()
