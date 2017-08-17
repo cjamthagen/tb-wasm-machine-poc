@@ -183,7 +183,13 @@ class ModuleValidation():
         self.module = module
 
     def TypeSection(self):
-        pass
+        section = self.module.type_section
+        if section is None:
+            return(True)
+        for func_sig in section.func_types:
+            if func_sig.form != -0x20 or func_sig.return_cnt > 1:
+                return(False)
+        return True
 
     def ImportSection(self):
         pass
@@ -219,14 +225,18 @@ class ModuleValidation():
         pass
 
     def ValidateAll(self):
-        self.TypeSection()
+        if not self.TypeSection():
+            return(False)
         self.ImportSection()
         self.FunctionSection()
         self.TableSection()
         self.MemorySection()
-        self.GlobalSection()
-        self.ExportSection()
-        self.StartSection()
+        if not self.GlobalSection():
+            return(False)
+        if not self.ExportSection():
+            return(False)
+        if not self.StartSection():
+            return(False)
         self.ElementSection()
         self.CodeSection()
         self.DataSection()
