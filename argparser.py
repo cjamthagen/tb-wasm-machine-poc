@@ -753,11 +753,11 @@ class ObjReader(object):
             temp_import_entry.kind = kind
 
             # function type
-            if kind == 0:
+            if kind == External_Kind.FUNCTION:
                 import_type, offset, dummy = Read(import_section[6], offset, 'varuint32')
                 temp_import_entry.type = import_type
             # table type
-            elif kind == 1:
+            elif kind == External_Kind.TABLE:
                 table_type = Table_Type()
                 table_type.elemet_type, offset, dummy = Read(import_section[6], offset, 'varint7')
                 rsz_limits = Resizable_Limits()
@@ -767,7 +767,7 @@ class ObjReader(object):
                     rsz_limits.maximum, offset, dummy = Read(import_section[6], offset, 'varuint32')
                 table_type.limit = rsz_limits
                 temp_import_entry.type = table_type
-            elif kind == 2:
+            elif kind == External_Kind.MEMORY:
                 memory_type = Memory_Type()
                 rsz_limits = Resizable_Limits()
                 rsz_limits.flags, offset, dummy = Read(import_section[6], offset, 'varuint1')
@@ -776,7 +776,7 @@ class ObjReader(object):
                     rsz_limits.maximum, offset, dummy = Read(import_section[6], offset, 'varuint32')
                 memory_type.limits = rsz_limits
                 temp_import_entry.type = memory_type
-            elif kind == 3:
+            elif kind == External_Kind.GLOBAL:
                 global_type = Global_Type()
                 global_type.content_type, offset, dummy = Read(import_section[6], offset, 'uint8')
                 global_type.mutability, offset, dummy = Read(import_section[6], offset, 'varuint1')
@@ -1065,7 +1065,6 @@ class ObjReader(object):
 
             temp_gl_var.global_type = temp_gl_type
             GS.global_variables.append(deepcopy(temp_gl_var))
-
 
             count -= 1
             loop = True

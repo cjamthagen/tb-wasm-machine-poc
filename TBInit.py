@@ -218,7 +218,28 @@ class ModuleValidation():
         pass
 
     def ExportSection(self):
-        pass
+        section = self.module.export_section
+        name_list = {}
+        for entry in section.export_entries:
+            name = ''.join(chr(c) for c in entry.field_str)
+            if name in name_list:
+                return(False)
+            name_list[name]=None
+
+            index = entry.index
+            if entry.kind == External_Kind.FUNCTION:
+                if index >= len(self.module.function_index_space):
+                    return(False)
+            if entry.kind == External_Kind.TABLE:
+                if index >= len(self.module.table_index_space):
+                    return(False)
+            if entry.kind == External_Kind.MEMORY:
+                if index >= len(self.module.memory_index_space):
+                    return(False)
+            if entry.kind == External_Kind.GLOBAL:
+                if index >= len(self.module.global_index_space):
+                    return(False)
+        return(True)
 
     def StartSection(self):
         pass
