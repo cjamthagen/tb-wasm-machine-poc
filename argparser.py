@@ -605,6 +605,7 @@ class ObjReader(object):
             if whatever[0] == 10:
                 code_section = whatever.copy()
                 section_exists = True
+                break
 
         if not section_exists:
             return None
@@ -677,6 +678,7 @@ class ObjReader(object):
             if whatever[0] == 11:
                 data_section = whatever.copy()
                 section_exists = True
+                break
 
         if not section_exists:
             return None
@@ -798,6 +800,7 @@ class ObjReader(object):
             if whatever[0] == 7:
                 export_section = whatever.copy()
                 section_exists = True
+                break
 
         if not section_exists:
             return None
@@ -838,6 +841,7 @@ class ObjReader(object):
             if whatever[0] == 1:
                 type_section = whatever.copy()
                 section_exists = True
+                break
 
         if not section_exists:
             return None
@@ -883,6 +887,7 @@ class ObjReader(object):
             if whatever[0] == 3:
                 function_section = whatever.copy()
                 section_exists = True
+                break
 
         if not section_exists:
             return None
@@ -911,6 +916,7 @@ class ObjReader(object):
             if whatever[0] == 9:
                 element_section = whatever.copy()
                 section_exists = True
+                break
 
         if not section_exists:
             return None
@@ -958,6 +964,7 @@ class ObjReader(object):
             if whatever[0] == 5:
                 memory_section = whatever.copy()
                 section_exists = True
+                break
 
         if not section_exists:
             return None
@@ -1033,6 +1040,7 @@ class ObjReader(object):
             if whatever[0] == 6:
                 global_section = whatever.copy()
                 section_exists = True
+                break
 
         if not section_exists:
             return None
@@ -1074,6 +1082,7 @@ class ObjReader(object):
             if whatever[0] == 8:
                 start_section = whatever.copy()
                 section_exists = True
+                break
 
         if not section_exists:
             return None
@@ -1288,7 +1297,7 @@ class PythonInterpreter(object):
 
     # palceholder for the validation tests
     def runValidations(self):
-        modulevalidation = ModuleValidation(self.modules[0])
+        modulevalidation = ModuleValidation(self.modules[-1])
         return(modulevalidation.ValidateAll())
 
 
