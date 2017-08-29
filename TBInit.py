@@ -206,7 +206,15 @@ class ModuleValidation():
         return(True)
 
     def FunctionSection(self):
-        pass
+        section = self.module.function_section
+        if section is None:
+            return(True)
+        csection = self.module.code_section
+        if csection is None:
+            return(False)
+        if len(section.type_section_index) != len(csection.func_bodies):
+            return(False)
+        return(True)
 
     def TableSection(self):
         pass
@@ -261,7 +269,8 @@ class ModuleValidation():
             return(False)
         if not self.ImportSection():
             return(False)
-        self.FunctionSection()
+        if not self.FunctionSection():
+            return(False)
         self.TableSection()
         self.MemorySection()
         if not self.GlobalSection():
