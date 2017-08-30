@@ -256,14 +256,17 @@ class Module():
                 if entry.kind == External_Kind.GLOBAL:
                     self.global_index_space.append(entry)
 
-        for entry in self.function_section.type_section_index:
-            self.function_index_space.append(entry)
+        if self.function_section is not None:
+            for entry in self.function_section.type_section_index:
+                self.function_index_space.append(entry)
 
-        for entry in self.table_section.table_types:
-            self.table_index_space.append(entry)
+        if self.table_section is not None:
+            for entry in self.table_section.table_types:
+                self.table_index_space.append(entry)
 
-        for entry in self.memory_section.memory_types:
-            self.memory_index_space.append(entry)
+        if self.memory_section is not None:
+            for entry in self.memory_section.memory_types:
+                self.memory_index_space.append(entry)
 
         if self.global_section is not None:
             for entry in self.global_section.global_variables:
