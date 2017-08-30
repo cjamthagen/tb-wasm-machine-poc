@@ -193,6 +193,8 @@ class ModuleValidation():
 
     def ImportSection(self):
         section = self.module.import_section
+        if section is None:
+            return(True)
         for entry in section.import_entry:
             if entry.kind == External_Kind.FUNCTION:
                 pass
@@ -223,10 +225,37 @@ class ModuleValidation():
         pass
 
     def GlobalSection(self):
-        pass
+        section = self.module.global_section
+        if section is None:
+            return(True)
+        for entry in section.global_variables:
+            desc_type = entry.global_type.content_type
+            init_expr = entry.init_expr
+            #get_global
+            if init_expr[0] == 0x23:
+                index = init_expr[1]
+                glob = self.module.global_index_space[index]
+                if desc_type != glob.content_type:
+                    return(False)
+            #const
+            elif init_expr[0] == 0x41:
+                if desc_type != 0x7f:
+                    return(False)
+            elif init_expr[0] == 0x42:
+                if desc_type != 0x7e:
+                    return(False)
+            elif init_expr[0] == 0x43:
+                if desc_type != 0x7d:
+                    return(False)
+            elif init_expr[0] == 0x44:
+                if desc_type != 0x7c:
+                    return(False)
+        return(True)
 
     def ExportSection(self):
         section = self.module.export_section
+        if section is None:
+            return(True)
         name_list = {}
         for entry in section.export_entries:
             name = ''.join(chr(c) for c in entry.field_str)

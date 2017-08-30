@@ -814,7 +814,7 @@ class ObjReader(object):
 
             for i in range(0, field_length):
                 field_name.append(export_section[6][offset + i])
-            temp_export_entry.fiels_str = field_name
+            temp_export_entry.field_str = field_name
             offset += field_length
 
             kind, offset, dummy = Read(export_section[6], offset, 'uint8')
