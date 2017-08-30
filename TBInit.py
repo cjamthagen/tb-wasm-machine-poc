@@ -279,7 +279,15 @@ class ModuleValidation():
         return(True)
 
     def StartSection(self):
-        pass
+        section = self.module.start_section
+        if section is None:
+            return(True)
+        index = section.function_section_index[0]
+        csection = self.module.CodeSection
+        if index >= len(csection.func_bodies):
+            return(False)
+        #func = self.module.function_index_space[index]
+        return(True)
 
     def ElementSection(self):
         pass
