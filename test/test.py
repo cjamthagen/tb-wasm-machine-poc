@@ -62,16 +62,6 @@ class Void_Spwner():
             print(fail + 'return code:' + pid)
             raise Exception("could not fork child")
 
-
-def ObjectList():
-    obj_list = []
-    cwd = os.getcwd()
-    for file in os.listdir(cwd + "/testsuite"):
-        if file.endswith(".wasm"):
-            obj_list.append(cwd + "/testsuite/" + file)
-
-    return(obj_list)
-
 ################################################################################
 class LEB128EncodeTest(Void_Spwner):
     def Legacy(self):
@@ -91,7 +81,19 @@ class LEB128Exhaustive(Void_Spwner):
 
 class SectionValidationTest(Void_Spwner):
     def Legacy(self):
+        fail_dir = "/testsuite_fail/"
         section_validation()
+        section_validation_fail(fail_dir + "type")
+        #section_validation_fail(fail_dir + "import")
+        #section_validation_fail(fail_dir + "function")
+        #section_validation_fail(fail_dir + "table")
+        #section_validation_fail(fail_dir + "memory")
+        #section_validation_fail(fail_dir + "global")
+        #section_validation_fail(fail_dir + "export")
+        #section_validation_fail(fail_dir + "start")
+        #section_validation_fail(fail_dir + "element")
+        #section_validation_fail(fail_dir + "code")
+        #section_validation_fail(fail_dir + "data")
 
     def GetName(self):
         return('sectionvalidationtest')
