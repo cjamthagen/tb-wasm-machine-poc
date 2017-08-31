@@ -153,8 +153,8 @@ def Read(section_byte, offset, kind):
                 # we have read the lasy byte of the operand
                 break
 
-            return_list = LEB128SignedDecode(operand)
-            operand = []
+        return_list = LEB128SignedDecode(operand)
+        operand = []
 
     return return_list, offset, read_bytes
 
