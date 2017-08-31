@@ -10,6 +10,7 @@ from test_LEB128 import test_signed_LEB128
 from test_LEB128 import test_unsigned_LEB128
 from leb128s import leb128sencodedecodeexhaustive
 from leb128s import leb128uencodedecodeexhaustive
+from sectionvalidation import *
 from abc import ABCMeta, abstractmethod
 sys.path.append('../')
 from utils import Colors
@@ -88,52 +89,25 @@ class LEB128Exhaustive(Void_Spwner):
     def GetName(self):
         return('leb128exhaustive')
 
+class SectionValidationTest(Void_Spwner):
+    def Legacy(self):
+        section_validation()
+
+    def GetName(self):
+        return('sectionvalidationtest')
+
 ################################################################################
 def main():
-    return_list = []
     # LEB128 tests
     leb128encodetest = LEB128EncodeTest()
     leb128encodetest.Spwn()
     # leb128s exhaustive
     leb128sex = LEB128Exhaustive()
     leb128sex.Spwn()
+
     # parser test on the WASM testsuite
-    obj_list = ObjectList()
-    for testfile in obj_list:
-        pid = os.fork()
-        # I dont have a bellybutton
-        if pid == 0:
-            # @DEVI-FIXME-pipe stdout and stderr to a file instead of the
-            # bitbucket
-            sys.stdout = open('/dev/null', 'w')
-            sys.stderr = open('/dev/null', 'w')
-
-            interpreter = PythonInterpreter()
-            module = interpreter.parse(testfile)
-            interpreter.appendmodule(module)
-            interpreter.dump_sections(module)
-            interpreter.runValidations()
-            vm = VM(interpreter.getmodules())
-            ms = vm.getState()
-            # interpreter.dump_sections(module)
-            DumpIndexSpaces(ms)
-            DumpLinearMems(ms.Linear_Memory, 1000)
-            sys.exit()
-        # the parent process
-        elif pid > 0:
-            # @DEVI-FIXME-we are intentionally blocking. later i will fix this
-            # so we can use multicores to run our reg tests faster.
-            cpid, status = os.waitpid(pid, 0)
-            return_list.append(status)
-            if status == 0:
-                print(success + testfile)
-            else:
-                print(fail + testfile)
-        else:
-            # basically we couldnt fork a child
-            print(fail + 'return code:' + pid)
-            raise Exception("could not fork child")
-
+    sectionvalidation = SectionValidationTest()
+    sectionvalidation.Spwn()
 
 if __name__ == '__main__':
     main()
