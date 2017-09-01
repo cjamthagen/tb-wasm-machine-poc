@@ -34,11 +34,12 @@ def section_validation_fail(directory):
             module = interpreter.parse(testfile)
             interpreter.appendmodule(module)
             interpreter.dump_sections(module)
+            modulevalidation = ModuleValidation(module)
             if "type" in directory:
-                if not interpreter.TypeSection():
+                if not modulevalidation.TypeSection():
                     sys.exit(1)
             if "global" in directory:
-                if not interpreter.GlobalSection():
+                if not modulevalidation.GlobalSection():
                     sys.exit(1)
             sys.exit()
         # the parent process
@@ -73,7 +74,8 @@ def section_validation():
             module = interpreter.parse(testfile)
             interpreter.appendmodule(module)
             interpreter.dump_sections(module)
-            interpreter.runValidations()
+            if not interpreter.runValidations():
+                sys.exit(1)
             vm = VM(interpreter.getmodules())
             ms = vm.getState()
             # interpreter.dump_sections(module)
