@@ -37,6 +37,9 @@ def section_validation_fail(directory):
             if "type" in directory:
                 if not interpreter.TypeSection():
                     sys.exit(1)
+            if "global" in directory:
+                if not interpreter.GlobalSection():
+                    sys.exit(1)
             sys.exit()
         # the parent process
         elif pid > 0:

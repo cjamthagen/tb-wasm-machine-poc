@@ -88,7 +88,7 @@ class SectionValidationTest(Void_Spwner):
         #section_validation_fail(fail_dir + "function")
         #section_validation_fail(fail_dir + "table")
         #section_validation_fail(fail_dir + "memory")
-        #section_validation_fail(fail_dir + "global")
+        section_validation_fail(fail_dir + "global")
         #section_validation_fail(fail_dir + "export")
         #section_validation_fail(fail_dir + "start")
         #section_validation_fail(fail_dir + "element")
