@@ -252,7 +252,7 @@ class ModuleValidation():
                     return(False)
         return(True)
 
-    def ExportSection(self):
+    def ExportSection(self, machinestate):
         section = self.module.export_section
         if section is None:
             return(True)
@@ -265,16 +265,16 @@ class ModuleValidation():
 
             index = entry.index
             if entry.kind == External_Kind.FUNCTION:
-                if index >= len(self.module.function_index_space):
+                if index >= len(machinestate.Index_Space_Function):
                     return(False)
             if entry.kind == External_Kind.TABLE:
-                if index >= len(self.module.table_index_space):
+                if index >= len(machinestate.Index_Space_Table):
                     return(False)
             if entry.kind == External_Kind.MEMORY:
-                if index >= len(self.module.memory_index_space):
+                if index >= len(machinestate.Index_Space_Linear):
                     return(False)
             if entry.kind == External_Kind.GLOBAL:
-                if index >= len(self.module.global_index_space):
+                if index >= len(machinestate.Index_Space_Global):
                     return(False)
         return(True)
 
@@ -302,6 +302,10 @@ class ModuleValidation():
         pass
 
     def ValidateAll(self):
+        machinestate = TBMachine()
+        init = TBInit(self.module, machinestate)
+        init.run()
+        machinestate = init.getInits()
         if not self.TypeSection():
             return(False)
         if not self.ImportSection():
@@ -312,7 +316,7 @@ class ModuleValidation():
         self.MemorySection()
         if not self.GlobalSection():
             return(False)
-        if not self.ExportSection():
+        if not self.ExportSection(machinestate):
             return(False)
         if not self.StartSection():
             return(False)
